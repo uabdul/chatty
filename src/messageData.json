@@ -1,0 +1,15 @@
+{
+  "currentUser": {"name": "Bob"},
+  "messages": [
+    {
+      "id": 1234,
+      "username": "Bob",
+      "content": "Has anyone seen my marbles?"
+    },
+    {
+      "id": 5678,
+      "username": "Anonymous",
+      "content": "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+    }
+  ]
+}
