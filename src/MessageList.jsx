@@ -8,12 +8,11 @@ class MessageList extends Component {
       return <Message key = {message.id} message = {message} />
     })
 
+    console.log('this is what the messages look like', messages)
+
     return (
         <main className="messages">
         {messages}
-        <div className="message system">
-          Anonymous1 changed their name to nomnom.
-        </div>
         </main>
     );
   }

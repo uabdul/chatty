@@ -55,8 +55,18 @@
       padding: 0 10px;
     }
 
+    .notification-content {
+      overflow: hidden;
+      font-style: italic;
+      padding-left: 20px
+    }
+
     .message-content {
       flex: 8;
+    }
+
+    .message-image {
+      max-width: 60%;
     }
 
     .message-username {
@@ -85,4 +95,10 @@
       line-height: 60px;
       padding: 0 10px;
       text-decoration: none;
+    }
+
+    .navbar-users {
+      font-weight: bold;
+      float: right;
+      padding: 20px;
     }

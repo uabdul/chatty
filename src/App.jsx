@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 import messageData from './messageData.json'
@@ -10,46 +11,90 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      currentUser: messageData.currentUser,
-      messages: messageData.messages
+      userCount: 0,
+      currentUser: {name: "Anonymous"},
+      messages: []
     };
     this.addNewMessage = this.addNewMessage.bind(this)
+    this.changeUsername = this.changeUsername.bind(this)
   }
 
   componentDidMount() {
     console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
+
+    this.socket = new WebSocket("ws://localhost:3001");
+
+    this.socket.onopen = (event) => {
+      console.log("Connected to WS server")
+    }
+
+    this.socket.onmessage = (event) => {
+      const receivedMessage = JSON.parse(event.data);
+
+      if (receivedMessage.type == "incomingUserUpdate") {
+        console.log('new user', receivedMessage.content)
+        this.setState({
+          userCount: parseInt(receivedMessage.content)
+        })
+      } else if (receivedMessage.type == "userColour") {
+        this.setState({
+          colour: receivedMessage.colour
+        })
+      } else {
+        const oldMessages = this.state.messages;
+        const newMessages = [...oldMessages, receivedMessage];
+        this.setState({
+          messages: newMessages
+        })
+      }
+    }
   }
 
   addNewMessage(message) {
-    const id = uuid();
-    const newMessage = {
-      id,
-      username: this.state.currentUser.name,
-      content: message
+    const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/
+
+    if (regex.test(message)) {
+      const newImage = {
+        type: "postImage",
+        username: this.state.currentUser.name,
+        colour: this.state.colour,
+        content: message
+      }
+      this.socket.send(JSON.stringify(newImage))
+    } else {
+      const newMessage = {
+        type: "postMessage",
+        username: this.state.currentUser.name,
+        colour: this.state.colour,
+        content: message
+      }
+      this.socket.send(JSON.stringify(newMessage))
     }
-    const oldMessages = this.state.messages
-    const newMessages = [...oldMessages, newMessage];
+    
+  }
+
+  changeUsername(user) {
+    const oldUsername = this.state.currentUser.name;
     this.setState({
-      currentUser: messageData.currentUser,
-      messages: newMessages
-    })
+      currentUser: {name: user}
+    });
+
+    const newNotification = {
+      type: "postNotification",
+      username: this.state.currentUser.name,
+      content: `${oldUsername} changed their name to ${user}.`
+    }
+    console.log('what new notification looks like', newNotification)
+    this.socket.send(JSON.stringify(newNotification))
   }
 
 
   render() {
     return (
       <div>
+        <NavBar userCount = {this.state.userCount} />
         <MessageList messages = {this.state.messages} />
-        <ChatBar currentUser = {this.state.currentUser} addNewMessage = {this.addNewMessage} />
+        <ChatBar currentUser = {this.state.currentUser} addNewMessage = {this.addNewMessage} changeUsername = {this.changeUsername} />
       </div>
     );
   }
