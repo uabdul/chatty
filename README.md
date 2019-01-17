@@ -1,45 +1,50 @@
-React Boilerplate
-=====================
+# Chatty
 
-A minimal and light dev environment for ReactJS.
+A dynamic instant messaging app built using ReactJS and WebSockets.  
 
-### Usage
+## Final Product
 
-Clone the boilerplate and create your own git repo.
+!["Screenshot of application"](https://github.com/uabdul/chatty/blob/master/docs/chatty-app.png?raw=true)
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+Users can send messages and change usernames. Image URLs sent as messages are automatically displayed. The navigation bar shows the number of users that are currently connected (based on the total number of WebSocket connections).
 
-Install the dependencies and start the server.
+## Using Chatty
+
+In order to use Chatty, please follow these steps:
+
+- Clone the repository onto your local machine by typing the following command in Terminal:
 
 ```
+git clone git@github.com:uabdul/chatty.git chatty
+```
+
+- Install the dependencies for the application, and then start the application:
+
+```
+cd chatty
 npm install
 npm start
-open http://localhost:3000
 ```
 
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
+- In a separate Terminal window, install the dependencies for the WebSockets server and start the server:
 
 ```
-npm run lint
+cd chatty/chatty_server
+npm install
+npm start
 ```
+
+- Navigate to `http://0.0.0.0:3000` in your browser.
 
 ### Dependencies
 
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+Chatty requires the following dependencies:
+- React
+- Webpack
+- [babel-loader](https://github.com/babel/babel-loader)
+- [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+
+The Chatty WebSockets server requires the following dependencies:
+- Express
+- ws
+- uuid
