@@ -12,10 +12,10 @@ const server = express()
   .use(express.static('public'))
   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
-// Create the WebSockets server
+// Creates the WebSockets server
 const wss = new SocketServer({ server });
 
-// Set up a callback that will run when a client connects to the server
+// callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 
@@ -27,6 +27,7 @@ wss.broadcast = function broadcast(data) {
   })
 }
 
+//broadcasts size of WebSocket clients when new user connects to the server
 function updateUsers(users) {
   const outputUsers = {
     type: "incomingUserUpdate",
@@ -35,6 +36,7 @@ function updateUsers(users) {
   wss.broadcast(JSON.stringify(outputUsers))
 }
 
+// assigns a random colour to user upon connecting to the server
 function setColour(user) {
   const colourOptions = ['#0099ff', '#00cc00', '#ff00ff', '#663300'];
   const userColour = {
@@ -49,12 +51,13 @@ wss.on('connection', (ws) => {
   updateUsers(wss.clients.size);
   setColour(ws);
 
-  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
+  // callback for when a client closes the socket
   ws.on('close', () => {
     console.log('Client disconnected');
     updateUsers(wss.clients.size)
   });
 
+  //message handling for messages, notifications and images
   ws.on('message', data => {
     const objData = JSON.parse(data);
     const id = uuid()

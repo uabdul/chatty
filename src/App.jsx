@@ -84,7 +84,6 @@ class App extends Component {
       username: this.state.currentUser.name,
       content: `${oldUsername} changed their name to ${user}.`
     }
-    console.log('what new notification looks like', newNotification)
     this.socket.send(JSON.stringify(newNotification))
   }
 
