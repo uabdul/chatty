@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
-import messageData from './messageData.json'
 import uuid from 'uuid/v4';
 const id = uuid();
 
@@ -50,6 +49,7 @@ class App extends Component {
     }
   }
 
+// message validation (handling for URLs versus text)
   addNewMessage(message) {
     const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/
 
@@ -73,6 +73,7 @@ class App extends Component {
     
   }
 
+  //changes username state and sends socket for notification
   changeUsername(user) {
     const oldUsername = this.state.currentUser.name;
     this.setState({

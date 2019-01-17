@@ -60,36 +60,19 @@ wss.on('connection', (ws) => {
   //message handling for messages, notifications and images
   ws.on('message', data => {
     const objData = JSON.parse(data);
-    const id = uuid()
+    objData.id = uuid()
     switch(objData.type) {
       case "postMessage":
-        const outputMessage = {
-          type: "incomingMessage",
-          id,
-          username: objData.username,
-          colour: objData.colour,
-          content: objData.content
-        }
-        wss.broadcast(JSON.stringify(outputMessage))
+        objData.type = "incomingMessage"
+        wss.broadcast(JSON.stringify(objData))
         break;
       case "postNotification":
-        const outputNotification = {
-          type: "incomingNotification",
-          id,
-          username: objData.username,
-          content: objData.content
-        }
-        wss.broadcast(JSON.stringify(outputNotification))
+        objData.type = "incomingNotification"
+        wss.broadcast(JSON.stringify(objData))
         break;
       case "postImage":
-        const outputImage = {
-          type: "incomingImage",
-          id,
-          colour: objData.colour,
-          username: objData.username,
-          content: objData.content
-        }
-        wss.broadcast(JSON.stringify(outputImage))
+        objData.type = "incomingImage"
+        wss.broadcast(JSON.stringify(objData))
         break;
       default:
         throw new Error("Unknown event type " + data.type)

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+//module that adds number of users to navigation bar based on props
 function NavBar(props)  {
   const userCount = parseInt(props.userCount);
   if (userCount == 1) {

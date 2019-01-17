@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+//returns DOM element depending on whether message is a text message, image URL or notificataion
 function Message(props)  {
   const message = props.message
   console.log('front end message', message)
